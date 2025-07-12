@@ -1,0 +1,37 @@
+def launch_custom_training(
+    # ... (other parameters remain the same)
+):
+    # Initialize Vertex AI
+    aiplatform.init(project=project, location=location, staging_bucket=staging_bucket)
+    
+    # Create the training job (specify container_uri ONLY HERE)
+    job = aiplatform.CustomContainerTrainingJob(
+        display_name=job_name,
+        container_uri=container_uri,  # <-- ONLY SPECIFY HERE
+    )
+
+    # Configure worker pool (NO container_uri here)
+    worker_pool_specs = [{
+        "machine_spec": {
+            "machine_type": machine_type,
+            "accelerator_type": accelerator_type,
+            "accelerator_count": accelerator_count,
+        },
+        "replica_count": 1,
+        "container_spec": {
+            # NO image_uri here! It's inherited from the job
+            "args": [
+                f"--data-path={data_path}",
+                f"--model-dir={output_dir}",
+                f"--learning-rate={learning_rate}",
+                f"--epochs={epochs}",
+            ],
+        },
+    }]
+
+    # Run the job
+    job.run(
+        worker_pool_specs=worker_pool_specs,
+        # ... (other parameters)
+    )
+    =====================
