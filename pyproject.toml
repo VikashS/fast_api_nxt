@@ -1,0 +1,84 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# ------------------------------
+# Project Metadata
+# ------------------------------
+[project]
+name = "your_project_name"
+version = "0.1.0"
+description = "Your project description"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Your Name", email = "you@example.com" }]
+keywords = ["python"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+# Reads dependencies from requirements.txt
+dynamic = ["dependencies"]
+
+# ------------------------------
+# Load requirements.txt
+# ------------------------------
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+# ------------------------------
+# Ruff (Lint + Format)
+# ------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+fix = true
+show-fixes = true
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+# ------------------------------
+# Pytest (Unit Testing)
+# ------------------------------
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --cov=src --cov-report=term-missing"
+testpaths = ["tests"]
+
+# ------------------------------
+# Coverage
+# ------------------------------
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+# ------------------------------
+# Mypy (Type Checking)
+# ------------------------------
+[tool.mypy]
+python_version = 3.9
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+ignore_missing_imports = true
+strict_optional = true
+
+# ------------------------------
+# Setuptools package discovery
+# ------------------------------
+[tool.setuptools.packages.find]
+where = ["src"]
